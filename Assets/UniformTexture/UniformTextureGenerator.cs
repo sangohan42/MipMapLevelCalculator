@@ -6,13 +6,13 @@ using UnityEngine;
 [System.Serializable]
 public class UniformTextureGenerator : MonoBehaviour
 {
-    public bool saveOnDisk = false;
-    public bool instantiateInScene = true;
-
     [SerializeField]
     private List<GameObject> _instantiatedGOs = new List<GameObject>();
     [SerializeField]
     private List<Texture> _savedTextures = new List<Texture>();
+
+    public bool saveOnDisk = false;
+    public bool instantiateInScene = true;
 
     public void Generate( Transform parent, BoxCollider spawningArea, int numberOfTextures, int numberOfCopy, int maxTextureSize )
     {

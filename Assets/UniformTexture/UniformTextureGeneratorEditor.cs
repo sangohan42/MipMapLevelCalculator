@@ -44,6 +44,8 @@ public class UniformTextureGeneratorEditor : Editor
         {
             uniformTextureGenerator.Delete();
         }
+
+        EditorUtility.SetDirty(target);
     }
 
     public void OnEnable()

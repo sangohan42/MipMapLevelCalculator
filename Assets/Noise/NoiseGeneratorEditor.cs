@@ -37,6 +37,8 @@ public class NoiseGeneratorEditor : Editor
         {
             noiseGenerator.Delete();
         }
+
+        EditorUtility.SetDirty(target);
     }
 
     public void OnEnable()
