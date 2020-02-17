@@ -14,7 +14,6 @@ public class TextureParsingLauncher : MonoBehaviour
     private Toggle _showAtlasContent;
 
     private bool _showColorAtlas;
-
     private TexturePackerCreator _currentTexturePackerCreator;
 
     public void Awake()
@@ -23,10 +22,11 @@ public class TextureParsingLauncher : MonoBehaviour
             _startParsingButton.onClick.AddListener( OnParseSceneButtonClicked );
         if( _showAtlasContent )
         {
-            _showAtlasContent.onValueChanged.AddListener( OnShowAtlas );
-            _showAtlasContent.enabled = false;
+            _showAtlasContent.onValueChanged.AddListener( OnToggleValueChanged );
+            _showAtlasContent.gameObject.SetActive(false);
+            _showAtlasContent.isOn = false;
+            _showColorAtlas = false;
         }
-        _showColorAtlas = false;
     }
 
     public void OnParseSceneButtonClicked()
@@ -42,17 +42,28 @@ public class TextureParsingLauncher : MonoBehaviour
         _currentTexturePackerCreator = new TexturePackerCreator();
         _currentTexturePackerCreator.ParseSceneAndCreateAtlases( _parsingRootTransform );
 
-        _showAtlasContent.enabled = true;
+        ShowToggleButton();
     }
 
-    public void OnShowAtlas(bool activated)
+    public void ShowToggleButton()
     {
-        _showColorAtlas = activated;
+        _showAtlasContent.gameObject.SetActive( true );
     }
+
+    public void OnToggleValueChanged( bool value )
+    {
+        _showColorAtlas = value;
+    }
+
+    void OnGUI()
+    {
+        if (_showColorAtlas)
+            _currentTexturePackerCreator?.DrawForDebug(AllTextureParser.TextureType.COLOR);
+    }
+
 
     public void Update()
     {
-        if( _showColorAtlas )
-            _currentTexturePackerCreator?.DrawForDebug( AllTextureParser.TextureType.COLOR );
+        
     }
 }

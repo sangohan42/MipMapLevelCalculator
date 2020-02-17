@@ -19,12 +19,12 @@ public class MaxLODComputer
         if (!SystemInfo.supportsComputeShaders)
             throw new NotSupportedException("Compute shaders not supported on this system!");
 
-        ComputeShader maxLODComputeShader = (ComputeShader) Resources.Load("MaxLODComputer");
+        MaxLODComputerInput input = Resources.Load<MaxLODComputerInput>("Shaders/MaxLODComputerInput");
 
-        if (!maxLODComputeShader)
+        if (!input.ComputeShader)
             throw new ArgumentException("MaxLODComputer not found");
 
-        _computeShader = maxLODComputeShader;
+        _computeShader = input.ComputeShader;
 
         try
         {

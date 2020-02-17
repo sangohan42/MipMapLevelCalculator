@@ -198,26 +198,12 @@ class Packer : IPacker
 
     private bool TryPackingTextures(List<Map> elts, bool expandOnly = false)
     {
-        if (SortAndPack(elts, expandOnly, out int meanPackedSize))
+        if (SortAndPack(elts, expandOnly))
             return true;
-        if (CalculateLOD(elts) && SortAndPack(elts, expandOnly, out meanPackedSize))
+        if (CalculateLOD(elts) && SortAndPack(elts, expandOnly))
             return true;
-        ReduceBigTexturesInHalf(elts, meanPackedSize / 2);
 
-        return SortAndPack(elts, expandOnly, out meanPackedSize);
-    }
-
-    private void ReduceBigTexturesInHalf(List<Map> elts, int threshold)
-    {
-        Debug.LogWarning("Reducing by half textures bigger than " + threshold + " in any dimension");
-        foreach (var map in elts)
-        {
-            if (map.MetaData.MipMapWidth > threshold || map.MetaData.MipMapHeight > threshold)
-            {
-                map.MetaData.MipMapWidth /= 2;
-                map.MetaData.MipMapHeight /= 2;
-            }
-        }
+        return false;
     }
 
     /// <summary>
@@ -275,6 +261,7 @@ class Packer : IPacker
 
     bool CalculateLOD(List<Map> elts)
     {
+        Debug.Log("Start MipMap Calculation");
         if (_lodProcessor == null)
         {
             try
@@ -290,9 +277,6 @@ class Packer : IPacker
 
         if (_lodProcessor != null)
         {
-            Camera main = Camera.main;
-            main.enabled = false;
-
             try
             {
                 Dictionary<Texture2D, Vector2Int> sizes = _lodProcessor.CalculateTexturesLOD(_type, _rootTransform);
@@ -303,6 +287,7 @@ class Packer : IPacker
                 {
                     if (sizes.TryGetValue(map.Texture, out Vector2Int size))
                     {
+                        Debug.Log("Replacing size from ( " + map.MetaData.MipMapWidth + ", " + map.MetaData.MipMapHeight + " ) to ( " + size.x + ", " + size.y + " )");
                         map.MetaData.MipMapWidth = size.x;
                         map.MetaData.MipMapHeight = size.y;
                     }
@@ -315,17 +300,14 @@ class Packer : IPacker
                 Debug.LogError(e.Message + "\n" + e.StackTrace);
                 return false;
             }
-            finally
-            {
-                main.enabled = true;
-            }
         }
 
         return false;
     }
 
-    bool SortAndPack(List<Map> elts, bool expandOnly, out int meanSize)
+    bool SortAndPack( List<Map> elts, bool expandOnly )
     {
+        Debug.Log("SortAndPack");
         DateTime startTime = DateTime.Now;
         EstimateNeededSize(elts, expandOnly);
 
@@ -340,8 +322,7 @@ class Packer : IPacker
 
         Map elt = null;
         bool everythingFits = false;
-        int totalWidth = 0;
-        int totalHeight = 0;
+
         while (!everythingFits)
         {
             Clear();
@@ -351,8 +332,7 @@ class Packer : IPacker
             for (int i = elts.Count - 1; i >= 0; i--)
             {
                 elt = elts[i];
-                totalWidth += elt.MetaData.MipMapWidth;
-                totalHeight += elt.MetaData.MipMapHeight;
+
                 if (!FindAreaForElement(elt))
                 {
                     everythingFits = false;
@@ -367,10 +347,8 @@ class Packer : IPacker
                         _totalHeight *= 2;
                     else
                     {
-                        Debug.LogError(_type + ": Sort and pack done in " +
-                                       DateTime.Now.Subtract(startTime).TotalMilliseconds +
+                        Debug.LogError(_type + ": Sort and pack done in " + DateTime.Now.Subtract(startTime).TotalMilliseconds +
                                        "ms, no fit! Missing textures " + i + " out of " + elts.Count);
-                        meanSize = Mathf.Max(totalWidth / (elts.Count - i), totalHeight / (elts.Count - i));
                         return false;
                     }
 
@@ -382,7 +360,7 @@ class Packer : IPacker
         Debug.LogWarning(_type + ": Sort and pack, fits " + everythingFits + "! Done in " +
                          DateTime.Now.Subtract(startTime).TotalMilliseconds + "ms. Textures added " +
                          _assignedRects.Count);
-        meanSize = Mathf.Max(totalWidth / elts.Count, totalHeight / elts.Count);
+
         return everythingFits;
     }
 

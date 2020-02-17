@@ -17,7 +17,7 @@ public class LODProcessor
 		_lodRenderer = new LODRenderer();
 	}
 
-	public Dictionary<Texture2D, Vector2Int> CalculateTexturesLOD(AllTextureParser.TextureType textureType, Transform rootNode, bool discardTransparent = true)
+	public Dictionary<Texture2D, Vector2Int> CalculateTexturesLOD( AllTextureParser.TextureType textureType, Transform rootNode, bool discardTransparent = true )
 	{
         Renderer[] allSceneRenderers = rootNode.GetComponentsInChildren<Renderer>(false);
         Dictionary<Texture2D, List<Material>> materialsByTexture = AllTextureParser.GetVisibleMaterialsByTextureForTextureType( allSceneRenderers, textureType, discardTransparent );
