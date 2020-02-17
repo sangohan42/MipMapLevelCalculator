@@ -2,7 +2,7 @@
 
 Custom MipMapLevel calculator :
 - Open the TestScene
-- Use both NoiseTextureGenerator and UniformtextureGenerator to fill the level with many generated textures
+- Both NoiseTextureGenerator and UniformtextureGenerator scripts helps you to fill the level with many generated textures. What they do is meant to be self-explanatory and their usage is straightforward : when "Instantiate in Scene" is set to true, they both allow you to instantiate cubes as child of the "Parent Transform" while remaining inside the "Spawning Area".
 - Play the TestScene
 - Click on the "Parse Scene" button will parse the scene :
 
