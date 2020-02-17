@@ -21,9 +21,12 @@ public class TextureParsingLauncher : MonoBehaviour
     {
         if( _startParsingButton )
             _startParsingButton.onClick.AddListener( OnParseSceneButtonClicked );
-
+        if( _showAtlasContent )
+        {
+            _showAtlasContent.onValueChanged.AddListener( OnShowAtlas );
+            _showAtlasContent.enabled = false;
+        }
         _showColorAtlas = false;
-        _showAtlasContent.enabled = false;
     }
 
     public void OnParseSceneButtonClicked()
@@ -39,7 +42,6 @@ public class TextureParsingLauncher : MonoBehaviour
         _currentTexturePackerCreator = new TexturePackerCreator();
         _currentTexturePackerCreator.ParseSceneAndCreateAtlases( _parsingRootTransform );
 
-        _startParsingButton.enabled = true;
         _showAtlasContent.enabled = true;
     }
 
@@ -50,7 +52,7 @@ public class TextureParsingLauncher : MonoBehaviour
 
     public void Update()
     {
-        if( _showColorAtlas && _currentTexturePackerCreator != null )
-            _currentTexturePackerCreator.DrawForDebug( AllTextureParser.TextureType.COLOR );
+        if( _showColorAtlas )
+            _currentTexturePackerCreator?.DrawForDebug( AllTextureParser.TextureType.COLOR );
     }
 }
