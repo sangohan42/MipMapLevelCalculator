@@ -1,6 +1,5 @@
-# MipMapLevelCalculator
+# Texture Packer & MipMapLevelCalculator
 
-Texture Packer and custom MipMapLevel calculator :
 - Open the TestScene
 - Both NoiseTextureGenerator and UniformtextureGenerator scripts are here to help you filling the level with many generated textures. Their usage is pretty straightforward : when "Instantiate in Scene" is set to true, they both allow you to instantiate cubes as child of the "Parent Transform" while remaining inside the "Spawning Area".
 - I recommend to create 300 to 500 different textures using the UniformTextureGenerator script by setting "Texture Number" to around 400 and the "Maximum Texture Size" to 2048.
