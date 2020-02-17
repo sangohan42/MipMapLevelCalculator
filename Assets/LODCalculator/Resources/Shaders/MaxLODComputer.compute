@@ -1,0 +1,20 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+Texture2D<float4> Input;
+RWBuffer<int> Output;
+float output_size;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	float4 in_pixel = Input[id.xy];
+	if( in_pixel.a > 0 ) // only consider rendered pixels
+	{
+		int tex_id = (int)round( output_size * in_pixel.g );
+		float lod_scale = in_pixel.b;
+		int lod = (int)round( in_pixel.r / lod_scale );
+
+		InterlockedMin(Output[tex_id], lod);
+	}
+}

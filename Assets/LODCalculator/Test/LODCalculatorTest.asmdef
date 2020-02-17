@@ -1,0 +1,19 @@
+{
+    "name": "LODCalculatorTest",
+    "references": [
+        "Zenject",
+        "Zenject-TestFramework",
+        "LODCalculator",
+        "IWDGraphicsUtils"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
