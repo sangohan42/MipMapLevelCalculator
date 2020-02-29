@@ -23,7 +23,7 @@ For each texture type (COLOR, GLOSS_MAP, AO, NORMAL) :
   
   3- If it fails to pack all the textures (if they are too big to fit inside the packer maximum size) for the current texture type, we start the mipmap level calculator step.
   
-  4- It parses the scene one more time but this time discards the transparent objects to create a brand new Dictionary VisibleMaterialsByTexture (one current limitations of the mipmap level calculator is that it is not capable of calculating the mipmap number for textures plugged at least on one visible transparent material).
+  4- The mipmap level calculator first parses the scene again but this time discards the transparent objects to create a brand new Dictionary VisibleMaterialsByTexture (one current limitations of the mipmap level calculator is that it is not capable of calculating the mipmap number for textures plugged at least on one visible transparent material).
   
   5- We extract all textures from this Dictionary for the current texture type and we create unique [0..1] Ids for the textures.
   
